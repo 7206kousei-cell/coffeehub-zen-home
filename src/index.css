@@ -96,3 +96,19 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+/* Rating page slider overrides */
+.rating-slider [data-radix-slider-track] {
+  @apply h-[3px] rounded-full;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.rating-slider [data-radix-slider-range] {
+  background: #E07A5F;
+}
+
+.rating-slider [data-radix-slider-thumb] {
+  @apply h-5 w-5 rounded-full border-0 shadow-lg;
+  background: #E07A5F;
+  box-shadow: 0 0 12px rgba(224, 122, 95, 0.4);
+}
