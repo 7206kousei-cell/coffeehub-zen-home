@@ -1,4 +1,5 @@
-import { Coffee, Clock, Bean, BarChart3, Star, Droplets, Lightbulb } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Coffee, Clock, Bean, BarChart3, Star, Droplets, Lightbulb, Moon, Sun } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const recentBrews = [
@@ -54,8 +55,14 @@ const StarRating = ({ rating }: { rating: number }) => (
 );
 
 const Index = () => {
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", dark);
+  }, [dark]);
+
   return (
-    <div className="min-h-screen bg-background max-w-md mx-auto relative">
+    <div className="min-h-screen bg-background max-w-md mx-auto relative transition-colors duration-300">
       {/* App Bar */}
       <header className="flex items-center justify-between px-6 pt-4 pb-3">
         <div className="flex items-center gap-2">
@@ -67,12 +74,21 @@ const Index = () => {
         <span className="text-xs text-muted-foreground font-light">
           2026年2月13日 金
         </span>
-        <div className="relative">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face" />
-            <AvatarFallback className="bg-secondary text-primary text-xs">YK</AvatarFallback>
-          </Avatar>
-          <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-accent border-2 border-background" />
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setDark(!dark)}
+            className="p-1.5 rounded-full text-muted-foreground hover:text-primary transition-colors"
+            aria-label="Toggle dark mode"
+          >
+            {dark ? <Sun size={18} strokeWidth={1.5} /> : <Moon size={18} strokeWidth={1.5} />}
+          </button>
+          <div className="relative">
+            <Avatar className="h-9 w-9">
+              <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face" />
+              <AvatarFallback className="bg-secondary text-primary text-xs">YK</AvatarFallback>
+            </Avatar>
+            <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-accent border-2 border-background" />
+          </div>
         </div>
       </header>
 
