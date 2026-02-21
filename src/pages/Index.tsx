@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Coffee, Clock, Bean, BarChart3, Star, Droplets, Lightbulb, Moon, Sun } from "lucide-react";
+import { Coffee, Clock, Bean, BarChart3, Star, Droplets, Moon, Sun, Lightbulb, ChevronRight, FlaskConical } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useNavigate } from "react-router-dom";
 
 const recentBrews = [
   {
@@ -30,10 +31,10 @@ const recentBrews = [
 ];
 
 const quickActions = [
-  { icon: Coffee, label: "記録する", accent: true },
-  { icon: Clock, label: "直近の抽出", accent: false },
+  { icon: FlaskConical, label: "抽出をはじめる", accent: true },
+  { icon: Clock, label: "抽出履歴", accent: false },
   { icon: Bean, label: "豆一覧", accent: false },
-  { icon: BarChart3, label: "統計", accent: false },
+  { icon: BarChart3, label: "分析", accent: false },
 ];
 
 const StarRating = ({ rating }: { rating: number }) => (
@@ -56,6 +57,7 @@ const StarRating = ({ rating }: { rating: number }) => (
 
 const Index = () => {
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -72,7 +74,7 @@ const Index = () => {
           </span>
         </div>
         <span className="text-xs text-muted-foreground font-light">
-          2026年2月13日 金
+          2026年2月21日 金
         </span>
         <div className="flex items-center gap-3">
           <button
@@ -93,14 +95,26 @@ const Index = () => {
       </header>
 
       {/* Hero / Caffeine Dashboard */}
-      <section className="px-6 pt-6 pb-8">
-        <h1
-          className="text-5xl font-light tracking-tight text-primary mb-2"
-          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
-        >
-          おはよう
-        </h1>
-        <p className="text-sm text-muted-foreground mb-6">今日の摂取カフェイン</p>
+      <section className="px-6 pt-6 pb-4">
+        <div className="flex items-start justify-between">
+          <div>
+            <h1
+              className="text-5xl font-light tracking-tight text-primary mb-2"
+              style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+            >
+              おはよう
+            </h1>
+            <p className="text-sm text-muted-foreground mb-6">今日の摂取カフェイン</p>
+          </div>
+          {/* TPS Score — Goal 2: 控えめに右上 */}
+          <div className="flex flex-col items-end gap-0.5 pt-2">
+            <span className="text-[10px] text-muted-foreground tracking-wide">TPS</span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl font-semibold text-primary" style={{ fontFamily: 'Inter, sans-serif' }}>72</span>
+              <span className="text-xs text-accent font-medium">+3</span>
+            </div>
+          </div>
+        </div>
         <div className="flex items-baseline gap-1">
           <span
             className="text-7xl font-bold tracking-tighter text-primary"
@@ -115,6 +129,39 @@ const Index = () => {
         <p className="text-xs text-muted-foreground mt-3">
           安全摂取目安まであと<span className="text-accent font-medium">258mg</span>
         </p>
+      </section>
+
+      {/* Goal 1: Optimization State + Goal 6: Loop Trajectory — サブ情報行 */}
+      <section className="px-6 pb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground tracking-wide">最適化状態</span>
+            <span className="text-[11px] font-medium text-primary">探索中</span>
+            <span className="text-[10px] text-muted-foreground">· 安定度 中</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] text-muted-foreground">直近</span>
+            {[3, 4, 4].map((r, i) => (
+              <span key={i} className="text-[11px] text-primary/70 font-medium">
+                ★{r}{i < 2 && <span className="text-muted-foreground/40 mx-0.5">→</span>}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Goal 3: 評価待ちCTA — 静かな導線 */}
+      <section className="px-6 pb-6">
+        <button
+          onClick={() => navigate("/rating")}
+          className="w-full flex items-center justify-between bg-card rounded-2xl border border-border/50 shadow-sm px-5 py-4 transition-all active:scale-[0.98]"
+        >
+          <div className="flex flex-col gap-1 text-left">
+            <p className="text-sm font-medium text-primary">昨日の抽出：評価待ち（1件）</p>
+            <p className="text-[11px] text-muted-foreground">評価すると改善精度が高まります</p>
+          </div>
+          <ChevronRight size={16} className="text-muted-foreground/50 flex-shrink-0" />
+        </button>
       </section>
 
       {/* Quick Action Cards */}
@@ -162,15 +209,15 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Daily Insight Card */}
+      {/* Goal 4: Daily Insight — 改善フィードバックに変更 */}
       <section className="px-6 pb-10">
         <div className="bg-card rounded-3xl border border-border/50 p-5">
           <div className="flex items-center gap-2 mb-2.5">
             <Lightbulb size={16} className="text-accent" strokeWidth={1.5} />
-            <h3 className="text-sm font-medium text-primary">今日のひとこと</h3>
+            <h3 className="text-sm font-medium text-primary">改善メモ</h3>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            この豆は92℃で最も高評価が出ています
+            前回より評価が上がりました（+1）。湯温92℃の提案が効果を出しています。
           </p>
         </div>
       </section>
