@@ -1,11 +1,19 @@
 import { useState, useEffect } from "react";
-import { Clock, Bean, BarChart3, Droplets, Moon, Sun, ChevronRight, FlaskConical, Lightbulb } from "lucide-react";
+import { Clock, Bean, BarChart3, Moon, Sun, ChevronRight, FlaskConical, Droplets } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import TasteRadarChart from "@/components/TasteRadarChart";
+import TPSLineChart from "@/components/TPSLineChart";
 
-// Mock EMA values (user_model_state)
-const tasteProfile = { sweetness: 6.2, acidity: 7.8, bitterness: 4.1, body: 5.5 };
+// Mock data
+const tpsHistory = [
+  { day: "M", value: 68 },
+  { day: "T", value: 71 },
+  { day: "W", value: 69 },
+  { day: "T", value: 74 },
+  { day: "F", value: 73 },
+  { day: "S", value: 76 },
+  { day: "S", value: 78 },
+];
 
 const quickActions = [
   { icon: FlaskConical, label: "抽出をはじめる", accent: true },
@@ -63,24 +71,40 @@ const Index = () => {
         </h1>
       </section>
 
-      {/* Taste Profile Hero */}
-      <section className="px-6 pt-4 pb-2">
-        <p className="text-[11px] text-muted-foreground tracking-wide mb-4">
-          あなたの味のプロファイル
-        </p>
-        <div className="flex justify-center">
-          <TasteRadarChart values={tasteProfile} size={170} />
+      {/* TPS Score */}
+      <section className="px-6 pt-6 pb-1">
+        <div className="flex items-baseline gap-2">
+          <span className="text-[11px] text-muted-foreground tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
+            TPS
+          </span>
+          <span
+            className="text-3xl font-light text-primary tabular-nums"
+            style={{ fontFamily: 'Inter, sans-serif' }}
+          >
+            78
+          </span>
+          <span className="text-sm text-accent font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+            +2
+          </span>
         </div>
+        <p className="text-[11px] text-muted-foreground mt-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+          Consistency improving.
+        </p>
       </section>
 
-      {/* Improvement Feedback — single line */}
-      <section className="px-6 pt-3 pb-6">
-        <div className="flex items-center gap-2 justify-center">
-          <Lightbulb size={13} className="text-accent flex-shrink-0" strokeWidth={1.5} />
-          <p className="text-[12px] text-muted-foreground leading-relaxed">
-            前回より評価が上がりました（+1）。提案（湯温）が効果を出しています。
-          </p>
-        </div>
+      {/* TPS Line Chart */}
+      <section className="px-6 pt-4 pb-2">
+        <TPSLineChart data={tpsHistory} />
+      </section>
+
+      {/* Improvement Suggestion */}
+      <section className="px-6 pt-4 pb-6">
+        <p className="text-[13px] text-primary leading-relaxed">
+          抽出がやや濃くなっています。
+        </p>
+        <p className="text-[13px] text-muted-foreground leading-relaxed mt-0.5">
+          次回：抽出時間 −10秒
+        </p>
       </section>
 
       {/* Pending Rating CTA */}
