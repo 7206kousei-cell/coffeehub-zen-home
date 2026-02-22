@@ -93,25 +93,25 @@ const Index = () => {
       </section>
 
       {/* TPS Line Chart */}
-      <section className="px-6 pt-4 pb-2">
+      <section className="px-6 pt-2 pb-2">
         <TPSLineChart data={tpsHistory} />
       </section>
 
       {/* Improvement Suggestion */}
-      <section className="px-6 pt-4 pb-6">
-        <p className="text-[13px] text-primary leading-relaxed">
+      <section className="px-6 pt-8 pb-8">
+        <p className="text-[13px] text-muted-foreground leading-[1.6]">
           抽出がやや濃くなっています。
         </p>
-        <p className="text-[13px] text-muted-foreground leading-relaxed mt-0.5">
+        <p className="text-[13px] text-primary leading-[1.6] mt-2 font-medium">
           次回：抽出時間 −10秒
         </p>
       </section>
 
       {/* Pending Rating CTA */}
-      <section className="px-6 pb-6">
+      <section className="px-6 pb-8">
         <button
           onClick={() => navigate("/rating")}
-          className="w-full flex items-center justify-between bg-card rounded-2xl border border-border/50 shadow-sm px-5 py-4 transition-all active:scale-[0.98]"
+          className="w-full flex items-center justify-between bg-card rounded-2xl border border-border/40 shadow-xs px-5 py-4 transition-all active:scale-[0.98]"
         >
           <div className="flex flex-col gap-1 text-left">
             <p className="text-sm font-medium text-primary">昨日の抽出：評価待ち（1件）</p>
@@ -122,7 +122,7 @@ const Index = () => {
       </section>
 
       {/* Quick Actions */}
-      <section className="px-6 pb-10">
+      <section className="px-6 pb-10 pt-2">
         <div className="grid grid-cols-4 gap-3">
           {quickActions.map(({ icon: Icon, label, accent }) => (
             <button
