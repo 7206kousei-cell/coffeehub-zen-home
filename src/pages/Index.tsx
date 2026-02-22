@@ -4,7 +4,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import TPSLineChart from "@/components/TPSLineChart";
 
-// Mock data
 const tpsHistory = [
   { day: "M", value: 68 },
   { day: "T", value: 71 },
@@ -62,7 +61,7 @@ const Index = () => {
       </header>
 
       {/* Greeting */}
-      <section className="px-6 pt-6 pb-2">
+      <section className="px-6 pt-6 pb-4">
         <h1
           className="text-4xl font-light tracking-tight text-primary"
           style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
@@ -71,44 +70,64 @@ const Index = () => {
         </h1>
       </section>
 
-      {/* TPS Score */}
-      <section className="px-6 pt-6 pb-1">
-        <div className="flex items-baseline gap-2">
-          <span className="text-[11px] text-muted-foreground tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
-            TPS
-          </span>
-          <span
-            className="text-3xl font-light text-primary tabular-nums"
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            78
-          </span>
-          <span className="text-sm text-accent font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
-            +2
-          </span>
+      {/* Card 1: TPS State Card */}
+      <section className="px-6 pb-4">
+        <div className="bg-card rounded-2xl border border-border/40 shadow-xs px-5 py-5">
+          <div className="flex items-start justify-between">
+            <div className="flex items-baseline gap-2">
+              <span className="text-[11px] text-muted-foreground tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
+                TPS
+              </span>
+              <span
+                className="text-3xl font-light text-primary tabular-nums"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                78
+              </span>
+              <span className="text-sm text-accent font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+                +2
+              </span>
+            </div>
+            <span className="text-[10px] text-muted-foreground/70 tracking-wide mt-1.5">
+              収束中
+            </span>
+          </div>
+          <p className="text-[13px] text-primary/80 mt-2.5 leading-relaxed">
+            味の完成度が上がっています
+          </p>
+          <p className="text-[11px] text-muted-foreground mt-1.5 leading-relaxed">
+            甘さをやや強く好む傾向です
+          </p>
         </div>
-        <p className="text-[11px] text-muted-foreground mt-1" style={{ fontFamily: 'Inter, sans-serif' }}>
-          Consistency improving.
-        </p>
       </section>
 
-      {/* TPS Line Chart */}
-      <section className="px-6 pt-2 pb-2">
-        <TPSLineChart data={tpsHistory} />
+      {/* Card 2: TPS Trend Chart Card */}
+      <section className="px-6 pb-4">
+        <div className="bg-card rounded-2xl border border-border/40 shadow-xs px-5 py-4">
+          <p className="text-[11px] text-muted-foreground mb-2 tracking-wide">
+            7日間の推移
+          </p>
+          <TPSLineChart data={tpsHistory} />
+        </div>
       </section>
 
-      {/* Improvement Suggestion */}
-      <section className="px-6 pt-8 pb-8">
-        <p className="text-[13px] text-muted-foreground leading-[1.6]">
-          抽出がやや濃くなっています。
-        </p>
-        <p className="text-[13px] text-primary leading-[1.6] mt-2 font-medium">
-          次回：抽出時間 −10秒
-        </p>
+      {/* Card 3: Improvement Suggestion Card */}
+      <section className="px-6 pb-4">
+        <div className="bg-card rounded-2xl border border-border/40 shadow-xs px-5 py-4">
+          <p className="text-[13px] text-primary leading-[1.7]">
+            抽出がやや濃くなっています。
+          </p>
+          <p className="text-[12px] text-muted-foreground leading-[1.7] mt-1.5">
+            湯温92℃の調整が評価向上に寄与しました。
+          </p>
+          <p className="text-[13px] text-primary leading-[1.7] mt-3 font-medium">
+            次回：抽出時間 −10秒
+          </p>
+        </div>
       </section>
 
-      {/* Pending Rating CTA */}
-      <section className="px-6 pb-8">
+      {/* Card 4: Pending Rating */}
+      <section className="px-6 pb-5">
         <button
           onClick={() => navigate("/rating")}
           className="w-full flex items-center justify-between bg-card rounded-2xl border border-border/40 shadow-xs px-5 py-4 transition-all active:scale-[0.98]"
@@ -122,7 +141,7 @@ const Index = () => {
       </section>
 
       {/* Quick Actions */}
-      <section className="px-6 pb-10 pt-2">
+      <section className="px-6 pb-10 pt-1">
         <div className="grid grid-cols-4 gap-3">
           {quickActions.map(({ icon: Icon, label, accent }) => (
             <button
@@ -130,7 +149,7 @@ const Index = () => {
               className={`flex flex-col items-center gap-2.5 py-4 rounded-2xl transition-all active:scale-95 ${
                 accent
                   ? "bg-accent text-accent-foreground shadow-lg shadow-accent/20"
-                  : "bg-card text-primary shadow-sm border border-border/50"
+                  : "bg-card text-primary shadow-xs border border-border/40"
               }`}
             >
               <Icon size={20} strokeWidth={1.5} />
