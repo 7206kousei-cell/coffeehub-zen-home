@@ -4,10 +4,10 @@ interface TPSLineChartProps {
 
 const TPSLineChart = ({ data }: TPSLineChartProps) => {
   const width = 280;
-  const height = 80;
+  const height = 72;
   const padX = 16;
-  const padTop = 8;
-  const padBottom = 20;
+  const padTop = 4;
+  const padBottom = 18;
 
   const chartW = width - padX * 2;
   const chartH = height - padTop - padBottom;
@@ -47,7 +47,7 @@ const TPSLineChart = ({ data }: TPSLineChartProps) => {
         d={linePath}
         fill="none"
         stroke="hsl(var(--accent))"
-        strokeWidth={1.5}
+        strokeWidth={1.2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -56,7 +56,7 @@ const TPSLineChart = ({ data }: TPSLineChartProps) => {
       <circle
         cx={points[points.length - 1].x}
         cy={points[points.length - 1].y}
-        r={2.5}
+        r={3}
         fill="hsl(var(--accent))"
       />
 
