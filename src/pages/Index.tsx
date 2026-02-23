@@ -15,10 +15,10 @@ const tpsHistory = [
 ];
 
 const quickActions = [
-  { icon: FlaskConical, label: "抽出をはじめる", accent: true },
-  { icon: Clock, label: "抽出履歴", accent: false },
-  { icon: Bean, label: "豆一覧", accent: false },
-  { icon: BarChart3, label: "分析", accent: false },
+  { icon: FlaskConical, label: "抽出をはじめる", accent: true, path: undefined },
+  { icon: Clock, label: "抽出履歴", accent: false, path: undefined },
+  { icon: Bean, label: "豆一覧", accent: false, path: undefined },
+  { icon: BarChart3, label: "分析", accent: false, path: "/analysis" },
 ];
 
 const Index = () => {
@@ -143,9 +143,10 @@ const Index = () => {
       {/* Quick Actions */}
       <section className="px-6 pb-10 pt-1">
         <div className="grid grid-cols-4 gap-3">
-          {quickActions.map(({ icon: Icon, label, accent }) => (
+          {quickActions.map(({ icon: Icon, label, accent, path }) => (
             <button
               key={label}
+              onClick={() => path && navigate(path)}
               className={`flex flex-col items-center gap-2.5 py-4 rounded-2xl transition-all active:scale-95 ${
                 accent
                   ? "bg-accent text-accent-foreground shadow-lg shadow-accent/20"
