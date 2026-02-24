@@ -16,7 +16,7 @@ const tpsHistory = [
 
 const quickActions = [
   { icon: FlaskConical, label: "抽出をはじめる", accent: true, path: undefined },
-  { icon: Clock, label: "抽出履歴", accent: false, path: undefined },
+  { icon: Clock, label: "抽出履歴", accent: false, path: "/history" },
   { icon: Bean, label: "豆一覧", accent: false, path: undefined },
   { icon: BarChart3, label: "分析", accent: false, path: "/analysis" },
 ];
