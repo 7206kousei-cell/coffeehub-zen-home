@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, SlidersHorizontal } from "lucide-react";
+import { ChevronLeft, SlidersHorizontal, ArrowUpDown, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BrewLogCard, { type BrewLogEntry } from "@/components/BrewLogCard";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 const mockData: BrewLogEntry[] = [
   {
@@ -81,11 +88,38 @@ const mockData: BrewLogEntry[] = [
   },
 ];
 
-const filterChips = ["期間", "★4以上", "★5のみ", "豆", "器具", "湯温", "挽き目"];
+const filterSections = [
+  {
+    title: "評価",
+    key: "rating",
+    options: ["★1以上", "★2以上", "★3以上", "★4以上", "★5のみ"],
+  },
+  {
+    title: "TPS",
+    key: "tps",
+    options: ["80以上", "70〜79", "70未満"],
+  },
+  {
+    title: "豆の種類",
+    key: "bean",
+    options: ["エチオピア", "グアテマラ", "ブラジル", "コロンビア", "ケニア"],
+  },
+  {
+    title: "湯温",
+    key: "temp",
+    options: ["90℃以上", "85〜89℃", "85℃未満"],
+  },
+  {
+    title: "味の傾向",
+    key: "taste",
+    options: ["苦味", "甘味", "酸味", "濃さ"],
+  },
+];
 
 const BrewHistory = () => {
   const navigate = useNavigate();
-  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
     const wasDark = document.documentElement.classList.contains("dark");
@@ -95,9 +129,19 @@ const BrewHistory = () => {
     };
   }, []);
 
-  const toggleFilter = (f: string) => {
-    setActiveFilters((prev) => (prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]));
+  const toggleFilter = (key: string, option: string) => {
+    setActiveFilters((prev) => {
+      const current = prev[key] || [];
+      const next = current.includes(option)
+        ? current.filter((x) => x !== option)
+        : [...current, option];
+      return { ...prev, [key]: next };
+    });
   };
+
+  const activeCount = Object.values(activeFilters).flat().length;
+
+  const clearFilters = () => setActiveFilters({});
 
   return (
     <div className="min-h-screen max-w-md mx-auto flex flex-col bg-background">
@@ -115,36 +159,26 @@ const BrewHistory = () => {
         >
           抽出ログ
         </span>
-        <button className="w-8 h-8 flex items-center justify-center rounded-full text-muted-foreground/40 hover:text-muted-foreground transition-colors">
-          <SlidersHorizontal size={15} strokeWidth={1.5} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button className="w-8 h-8 flex items-center justify-center rounded-full text-muted-foreground/40 hover:text-muted-foreground transition-colors">
+            <ArrowUpDown size={15} strokeWidth={1.5} />
+          </button>
+          <button
+            onClick={() => setFilterOpen(true)}
+            className="relative w-8 h-8 flex items-center justify-center rounded-full text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+          >
+            <SlidersHorizontal size={15} strokeWidth={1.5} />
+            {activeCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-accent text-accent-foreground text-[9px] flex items-center justify-center font-medium">
+                {activeCount}
+              </span>
+            )}
+          </button>
+        </div>
       </header>
 
-      {/* Filter chips */}
-      <div className="px-6 pt-3 pb-4">
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
-          {filterChips.map((chip) => {
-            const active = activeFilters.includes(chip);
-            return (
-              <button
-                key={chip}
-                onClick={() => toggleFilter(chip)}
-                className={`flex-shrink-0 text-[12px] px-3 py-1.5 rounded-full border transition-colors ${
-                  active
-                    ? "border-accent text-primary"
-                    : "border-border/40 text-muted-foreground bg-transparent"
-                }`}
-                style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
-              >
-                {chip}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Log list */}
-      <div className="px-6 pb-10 space-y-4">
+      <div className="px-6 pt-3 pb-10 space-y-4">
         {mockData.map((entry) => (
           <BrewLogCard
             key={entry.id}
@@ -153,6 +187,74 @@ const BrewHistory = () => {
           />
         ))}
       </div>
+
+      {/* Filter Modal */}
+      <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
+        <DialogContent className="max-w-[calc(100%-3rem)] rounded-2xl border-border/40 bg-card p-0 gap-0">
+          <DialogHeader className="px-5 pt-5 pb-3">
+            <div className="flex items-center justify-between">
+              <DialogTitle
+                className="text-[14px] font-semibold text-primary"
+                style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+              >
+                フィルター
+              </DialogTitle>
+              {activeCount > 0 && (
+                <button
+                  onClick={clearFilters}
+                  className="text-[11px] text-muted-foreground hover:text-primary transition-colors"
+                  style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                >
+                  すべてクリア
+                </button>
+              )}
+            </div>
+            <DialogDescription className="sr-only">抽出ログのフィルター設定</DialogDescription>
+          </DialogHeader>
+
+          <div className="px-5 pb-5 space-y-5 max-h-[60vh] overflow-y-auto">
+            {filterSections.map((section) => (
+              <div key={section.key}>
+                <p
+                  className="text-[11px] text-muted-foreground mb-2"
+                  style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                >
+                  {section.title}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {section.options.map((option) => {
+                    const active = (activeFilters[section.key] || []).includes(option);
+                    return (
+                      <button
+                        key={option}
+                        onClick={() => toggleFilter(section.key, option)}
+                        className={`text-[12px] px-3 py-1.5 rounded-full border transition-colors ${
+                          active
+                            ? "border-accent text-primary"
+                            : "border-border/40 text-muted-foreground bg-transparent"
+                        }`}
+                        style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                      >
+                        {option}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="px-5 pb-5">
+            <button
+              onClick={() => setFilterOpen(false)}
+              className="w-full py-2.5 rounded-xl border border-border/40 text-[13px] text-primary font-medium transition-colors hover:bg-secondary"
+              style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+            >
+              適用する
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
