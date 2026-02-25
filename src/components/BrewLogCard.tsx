@@ -1,4 +1,4 @@
-import { Clock, Thermometer, Settings2, Bean } from "lucide-react";
+import { Clock, Thermometer, Settings2, Bean, Star } from "lucide-react";
 
 export type BrewStatus = "improved" | "stable" | "declined" | "unrated";
 
@@ -77,9 +77,20 @@ const BrewLogCard = ({ entry, onClick }: BrewLogCardProps) => {
 
         {/* Row 2: rating + TPS */}
         <div className="flex items-baseline justify-between mt-1.5">
-          <span className="text-[28px] font-bold text-primary leading-none tabular-nums" style={{ fontFamily: "Inter, sans-serif" }}>
-            {entry.rating !== null ? `${entry.rating}` : "—"}
-          </span>
+          <div className="flex items-center gap-0.5">
+            {entry.rating !== null ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  size={14}
+                  strokeWidth={1.5}
+                  className={i < entry.rating! ? "text-accent fill-accent" : "text-muted-foreground/30"}
+                />
+              ))
+            ) : (
+              <span className="text-[13px] text-muted-foreground/40" style={{ fontFamily: "Inter, sans-serif" }}>未評価</span>
+            )}
+          </div>
           <div className="flex items-baseline gap-1">
             <span className="text-[11px] text-muted-foreground tabular-nums" style={{ fontFamily: "Inter, sans-serif" }}>
               TPS {entry.tps}
